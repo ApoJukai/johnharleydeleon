@@ -64,11 +64,20 @@
 };
 
         // Handle Login
-        document.getElementById('loginBtn').addEventListener('click', () => {
-            const email = document.getElementById('adminEmail').value;
-            const pass = document.getElementById('adminPassword').value;
-            signInWithEmailAndPassword(auth, email, pass).catch(error => alert(error.message));
+       document.getElementById('loginBtn').addEventListener('click', () => {
+    const email = document.getElementById('adminEmail').value;
+    const pass = document.getElementById('adminPassword').value;
+    
+    signInWithEmailAndPassword(auth, email, pass)
+        .then((userCredential) => {
+            // Signed in 
+            console.log("Logged in successfully:", userCredential.user.email);
+        })
+        .catch((error) => {
+            // This will show you the exact error code if something fails
+            alert("Login Failed: " + error.code + " - " + error.message);
         });
+});
 
         // Watch Auth State
         onAuthStateChanged(auth, user => {

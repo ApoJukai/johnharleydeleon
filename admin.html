@@ -11,10 +11,13 @@
         h2 { font-family: 'Montserrat', sans-serif; margin-bottom: 20px; color: #1a252f; }
         .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 5px; font-weight: 500; }
-        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
         button { background: #0056b3; color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
         button:hover { background: #003d82; }
         #appContent { display: none; }
+        .logout-bar { max-width: 600px; margin: 0 auto 20px auto; text-align: right; }
+        .btn-logout { background: #e74c3c; padding: 6px 12px; font-size: 12px; }
+        .btn-logout:hover { background: #c0392b; }
     </style>
 </head>
 <body>
@@ -22,13 +25,23 @@
     <!-- Login Screen -->
     <div id="loginScreen" class="admin-box">
         <h2>Admin Login</h2>
-        <div class="form-group"><label>Email</label><input type="email" id="adminEmail"></div>
-        <div class="form-group"><label>Password</label><input type="password" id="adminPassword"></div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="adminEmail" placeholder="admin@example.com">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="adminPassword" placeholder="••••••••">
+        </div>
         <button id="loginBtn">Login</button>
     </div>
 
     <!-- Main Admin Panel (Hidden until authenticated) -->
     <div id="appContent">
+        <div class="logout-bar">
+            <button id="logoutBtn" class="btn-logout">Log Out</button>
+        </div>
+
         <div class="admin-box">
             <h2>Add New Experience</h2>
             <div class="form-group"><label>Role Title</label><input type="text" id="expRole"></div>
@@ -41,46 +54,61 @@
         <div class="admin-box">
             <h2>Add Certificate / Training</h2>
             <div class="form-group"><label>Certificate Title</label><input type="text" id="certTitle"></div>
-            <div class="form-group"><label>Upload Certificate Image (Optional - leaves as badge if empty)</label><input type="file" id="certFile"></div>
+            <div class="form-group"><label>Upload Certificate Image (Optional)</label><input type="file" id="certFile"></div>
             <button id="saveCertBtn">Save Certification</button>
         </div>
     </div>
 
+    <!-- Firebase Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         // REPLACE WITH YOUR FIREBASE CONFIG
-        const firebaseConfig = {
-  apiKey: "AIzaSyCrOIPj0Tl-YySGf4DTNoLG4y7DZBU5GV4",
-  authDomain: "john-profile.firebaseapp.com",
-  projectId: "john-profile",
-  storageBucket: "john-profile.firebasestorage.app",
-  messagingSenderId: "403656726440",
-  appId: "1:403656726440:web:e2d65845d953d2e738af9d",
-  measurementId: "G-LXBK362V7Y"
-};
+        const firebaseConfig = { 
+            apiKey: "YAIzaSyCrOIPj0Tl-YySGf4DTNoLG4y7DZBU5GV4", 
+            authDomain: "john-profile.firebaseapp.com", 
+            projectId: "john-profile", 
+            storageBucket: "john-profile.firebasestorage.app", 
+            messagingSenderId: "403656726440", 
+            appId: "AG-LXBK362V7Y" 
+        };
 
-        // Handle Login
-       document.getElementById('loginBtn').addEventListener('click', () => {
-    const email = document.getElementById('adminEmail').value;
-    const pass = document.getElementById('adminPassword').value;
-    
-    signInWithEmailAndPassword(auth, email, pass)
-        .then((userCredential) => {
-            // Signed in 
-            console.log("Logged in successfully:", userCredential.user.email);
-        })
-        .catch((error) => {
-            // This will show you the exact error code if something fails
-            alert("Login Failed: " + error.code + " - " + error.message);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Handle Login Click with Error Alerts
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const email = document.getElementById('adminEmail').value.trim();
+            const pass = document.getElementById('adminPassword').value.trim();
+
+            if (!email || !pass) {
+                alert("Please enter both email and password.");
+                return;
+            }
+
+            signInWithEmailAndPassword(auth, email, pass)
+                .then((userCredential) => {
+                    // Success triggers onAuthStateChanged automatically
+                })
+                .catch((error) => {
+                    alert("Login Error: " + error.message);
+                });
         });
-});
 
-        // Watch Auth State
-        onAuthStateChanged(auth, user => {
+        // Handle Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                alert("Logged out successfully.");
+            });
+        });
+
+        // Watch Auth State to Toggle Screens Safely
+        onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appContent').style.display = 'block';
@@ -92,16 +120,26 @@
 
         // Save Experience to Firestore
         document.getElementById('saveExpBtn').addEventListener('click', async () => {
+            const role = document.getElementById('expRole').value;
+            const company = document.getElementById('expCompany').value;
+            const dates = document.getElementById('expDates').value;
+            const description = document.getElementById('expDesc').value;
+
+            if (!role || !company || !dates) {
+                alert("Please fill out the required fields.");
+                return;
+            }
+
             try {
-                await addDoc(collection(db, "experiences"), {
-                    role: document.getElementById('expRole').value,
-                    company: document.getElementById('expCompany').value,
-                    dates: document.getElementById('expDates').value,
-                    description: document.getElementById('expDesc').value
-                });
+                await addDoc(collection(db, "experiences"), { role, company, dates, description });
                 alert("Experience added successfully!");
-                location.reload();
-            } catch (e) { alert("Error adding document: " + e); }
+                document.getElementById('expRole').value = '';
+                document.getElementById('expCompany').value = '';
+                document.getElementById('expDates').value = '';
+                document.getElementById('expDesc').value = '';
+            } catch (e) { 
+                alert("Error adding experience: " + e.message); 
+            }
         });
 
         // Upload Certificate Image to Storage & Save to Firestore
@@ -110,18 +148,26 @@
             const fileInput = document.getElementById('certFile');
             let imageUrl = "";
 
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                const storageRef = ref(storage, 'certificates/' + file.name);
-                const snapshot = await uploadBytes(storageRef, file);
-                imageUrl = await getDownloadURL(snapshot.ref);
+            if (!title) {
+                alert("Please enter a certificate title.");
+                return;
             }
 
             try {
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    const storageRef = ref(storage, 'certificates/' + Date.now() + '_' + file.name);
+                    const snapshot = await uploadBytes(storageRef, file);
+                    imageUrl = await getDownloadURL(snapshot.ref);
+                }
+
                 await addDoc(collection(db, "certifications"), { title, imageUrl });
                 alert("Certification saved successfully!");
-                location.reload();
-            } catch (e) { alert("Error: " + e); }
+                document.getElementById('certTitle').value = '';
+                fileInput.value = '';
+            } catch (e) { 
+                alert("Error saving certification: " + e.message); 
+            }
         });
     </script>
 </body>

@@ -82,6 +82,7 @@ export default function Page() {
     johnharleydeleon@gmail.com <ArrowUpRight />
   </a>
   <a className="contact-phone" href="Phone:+36 30 613 8167">
+    +36 30 613 8167 <ArrowUpRight />
   </a>
   <div className="contact-footer">
     <span>John Harley De Leon</span>

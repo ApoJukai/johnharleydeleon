@@ -70,7 +70,7 @@ export default function Page() {
           <p className="eyebrow">Industrial engineer · digital transformation leader</p>
           <h1>Making complex operations<br /><em>work beautifully.</em></h1>
           <p className="intro">I turn manufacturing challenges into measurable performance — through better methods, smarter systems, and the people who make them real.</p>
-          <div className="hero-actions"><a className="button button-dark" href="#experience">Explore my work <ArrowUpRight /></a><a className="button button-outline" onClick={downloadCV}>Download CV <Download /></a><a className="text-link" href="mailto:johnharleydeleon@gmail.com">L[...]
+          <div className="hero-actions"><a className="button button-dark" href="#experience">Explore my work <ArrowUpRight /></a><button className="button button-outline" onClick={downloadCV}>Download CV <Download /></button><a className="text-link" href="mailto:johnharleydeleon@gmail.com">L[...]
         </div>
         <div className="portrait-wrap reveal">
           <div className="portrait-frame"><img src={imageUrl} alt="John Harley De Leon in a dark suit in a modern office" /></div>

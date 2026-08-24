@@ -75,7 +75,21 @@ export default function Page() {
 
       <section id="development" className="education section-pad"><div><p className="eyebrow">Foundation</p><h2>Built on the<br /><em>shop floor.</em></h2></div><div className="education-details"><p className="eyebrow">Education</p><h3>Bachelor of Science<br />in Industrial Engineering</h3><p>De La Salle, Lipa City<br />Philippines</p><div className="certs"><p className="eyebrow">Certifications & development</p><div className="cert-list"><span>Certified Project Management Specialist</span><span>Certified Lean Six Sigma Green Belt</span><span>Certified Lean Six Sigma Yellow Belt</span><span>Cybersecurity Fundamentals</span><span>Cybersecurity Foundation</span><span>Claroty Cybersecurity Analyst</span><span>School of Data Science</span><span>RPA Business Analyst Fundamentals</span><span>Tableau</span><span>Advanced Lean</span><span>Lean Fundamentals</span><span>Excel Master Class</span><span>Methods-Time Measurement</span><span>Ergonomics</span><span>AutoCAD — TESDA</span></div></div></div></section>
 
-      <section id="contact" className="contact section-pad"><p className="eyebrow">Start a conversation</p><h2>Let&apos;s make the<br /><em>next system better.</em></h2><a className="contact-email" href="mailto:johnharleydeleon@gmail.com">johnharleydeleon@gmail.com <ArrowUpRight /></a><div className="contact-footer"><span>John Harley De Leon</span><span>Industrial Engineer / Digital Leader</span><span>© 2026</span></div></section>
+      <section id="contact" className="contact section-pad">
+  <p className="eyebrow">Start a conversation</p>
+  <h2>Let&apos;s make the<br /><em>next system better.</em></h2>
+  <a className="contact-email" href="mailto:johnharleydeleon@gmail.com">
+    johnharleydeleon@gmail.com <ArrowUpRight />
+  </a>
+  <a className="contact-phone" href="tel:+36306138167">
+    +36 30 613 8167
+  </a>
+  <div className="contact-footer">
+    <span>John Harley De Leon</span>
+    <span>Industrial Engineer / Digital Leader</span>
+    <span>© 2026</span>
+  </div>
+</section>
     </main>
   )
 }

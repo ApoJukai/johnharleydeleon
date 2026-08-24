@@ -1,18 +1,18 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ArrowUpRight, ChevronDown, Menu, X, Download } from 'lucide-react'
+import { ArrowUpRight, ChevronDown, Menu, X } from 'lucide-react'
 
 const imageUrl = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/profile-Y4raC7nY1TbRbGNDBoBzfHYDR7sUYd.jpg'
 
 const experience = [
-  { period: 'Nov 2023 — Present', role: 'Site Cybersecurity & Digital Leader', company: 'Schneider Electric · Gyöngyös, Hungary', copy: 'Leading the site digital transformation and Smart Factory deployment strategy, cybersecurity governance, and IT/OT operational resilience.' },
-  { period: 'Jan 2022 — Nov 2023', role: 'Deployment & Transformation Leader', company: 'Schneider Electric · Cavite, Philippines', copy: 'Supported global Smart Factory solution deployments, site transformation programs, and digital adoption across multiple manufacturing sites.' },
-  { period: 'Jan 2021 — Dec 2021', role: 'NPM / PCBA Section Manager', company: 'Sercomm Philippines Inc. · Laguna, Philippines', copy: 'Led PCBA operations across production, quality, material planning, staffing, and continuous improvement initiatives.' },
-  { period: 'Oct 2019 — Dec 2020', role: 'Industrial Performance Leader', company: 'Schneider Electric · Cavite, Philippines', copy: 'Diagnosed capability gaps and implemented Schneider Performance System across plant operations.' },
-  { period: 'Jun 2017 — Sep 2019', role: 'Methods Engineer', company: 'Schneider Electric · Cavite, Philippines', copy: 'Delivered Lean diagnostic projects, line design, FMEA, time studies, balance analysis, and standard work improvements.' },
-  { period: 'Mar 2017 — Jun 2017', role: 'Quality Engineer', company: 'Schneider Electric · Cavite, Philippines', copy: 'Established quality systems, root-cause problem solving, process control systems, and supplier quality management.' },
-  { period: 'Nov 2014 — Mar 2017', role: 'Continuous Improvement Leader / Production Supervisor', company: 'Schneider Electric · Cavite, Philippines', copy: 'Led daily shop-floor execution and continuous improvement across PCBA operations.' },
+  { period: 'Nov 2023 — Present', role: 'Site Cybersecurity & Digital Leader', company: 'Schneider Electric · Gyöngyös, Hungary', copy: 'Leading the site digital transformation and Smart Factory roadmap, connecting production priorities to practical systems, dashboards, training, and resilient IT/OT operations.' },
+  { period: 'Jan 2022 — Nov 2023', role: 'Deployment & Transformation Leader', company: 'Schneider Electric · Cavite, Philippines', copy: 'Supported global Smart Factory solution deployments, structured user support, service improvements, training, and adoption across sites.' },
+  { period: 'Jan 2021 — Dec 2021', role: 'NPM / PCBA Section Manager', company: 'Sercomm Philippines Inc. · Laguna, Philippines', copy: 'Led PCBA operations across production, quality, materials, schedules, section KPIs, 5S, and shift-level performance.' },
+  { period: 'Oct 2019 — Dec 2020', role: 'Industrial Performance Leader', company: 'Schneider Electric · Cavite, Philippines', copy: 'Diagnosed capability gaps and implemented Schneider Performance System principles to improve productivity and operating discipline.' },
+  { period: 'Jun 2017 — Sep 2019', role: 'Methods Engineer', company: 'Schneider Electric · Cavite, Philippines', copy: 'Delivered Lean diagnostic projects, line design, FMEA, time studies, balancing, capacity analysis, VSM, and digital performance packages.' },
+  { period: 'Mar 2017 — Jun 2017', role: 'Quality Engineer', company: 'Schneider Electric · Cavite, Philippines', copy: 'Established quality systems, root-cause problem solving, process control, and a disciplined foundation in manufacturing excellence.' },
+  { period: 'Nov 2014 — Mar 2017', role: 'Continuous Improvement Leader / Production Supervisor', company: 'Schneider Electric · Cavite, Philippines', copy: 'Led daily shop-floor execution and cross-functional Lean improvement across manpower, machines, materials, methods, and measurement. Managed staffing, cross-training, performance, materials, yields, efficiency, and production constraints while delivering safety, quality, delivery, and productivity targets.' },
 ]
 
 const skills = [
@@ -42,16 +42,6 @@ export default function Page() {
 
   const closeMenu = () => setMenuOpen(false)
 
-  const downloadCV = () => {
-    // Create a link to download the CV from the public folder
-    const link = document.createElement('a')
-    link.href = '/cv.pdf'
-    link.download = 'John-Harley-De-Leon-CV.pdf'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
-
   return (
     <main className="site-shell">
       <header className="topbar">
@@ -70,7 +60,7 @@ export default function Page() {
           <p className="eyebrow">Industrial engineer · digital transformation leader</p>
           <h1>Making complex operations<br /><em>work beautifully.</em></h1>
           <p className="intro">I turn manufacturing challenges into measurable performance — through better methods, smarter systems, and the people who make them real.</p>
-          <div className="hero-actions"><a className="button button-dark" href="#experience">Explore my work <ArrowUpRight /></a><button className="button button-outline" onClick={downloadCV}>Download CV <Download /></button><a className="text-link" href="mailto:johnharleydeleon@gmail.com">Let's talk <ArrowUpRight /></a></div>
+          <div className="hero-actions"><a className="button button-dark" href="#experience">Explore my work <ArrowUpRight /></a><a className="text-link" href="mailto:johnharleydeleon@gmail.com">Let&apos;s connect <span>↗</span></a></div>
         </div>
         <div className="portrait-wrap reveal">
           <div className="portrait-frame"><img src={imageUrl} alt="John Harley De Leon in a dark suit in a modern office" /></div>
@@ -79,27 +69,13 @@ export default function Page() {
         <div className="hero-index">01 <span>—</span> 06</div>
       </section>
 
-      <section id="expertise" className="expertise section-pad"><div className="section-heading"><p className="eyebrow">What I bring</p><h2>Systems thinking.<br /><em>Practical impact.</em></h2></div><div className="expertise-grid">{skills.map((skill) => <div className="expertise-card" key={skill.name}><h3>{skill.name}</h3><p>{skill.detail}</p></div>)}</div></section>
+      <section id="expertise" className="expertise section-pad"><div className="section-heading"><p className="eyebrow">What I bring</p><h2>Systems thinking.<br /><em>Practical impact.</em></h2></div><div className="skills-grid">{skills.map((skill, index) => { const isExpanded = expandedSkill === skill.name; return <div className={`skill ${isExpanded ? 'is-expanded' : ''}`} key={skill.name}><button type="button" aria-expanded={isExpanded} onClick={() => setExpandedSkill(isExpanded ? null : skill.name)}><span>0{index + 1}</span><strong>{skill.name}</strong><ChevronDown /></button>{isExpanded && <p>{skill.detail}</p>}</div> })}</div></section>
 
-      <section id="experience" className="experience section-pad"><div className="section-heading"><p className="eyebrow">Selected experience</p><h2>The path so far.</h2></div><div className="timeline">{experience.map((exp, i) => <div key={i} className="timeline-item"><span className="period">{exp.period}</span><div className="timeline-content"><h3>{exp.role}</h3><p className="company">{exp.company}</p><p>{exp.copy}</p></div></div>)}</div></section>
+      <section id="experience" className="experience section-pad"><div className="section-heading"><p className="eyebrow">Selected experience</p><h2>The path so far.</h2></div><div className="timeline">{experience.map((item, index) => <article className={`timeline-item ${index === 0 ? 'current' : ''}`} key={item.role}><div className="timeline-meta"><span>{item.period}</span><b>{index === 0 ? 'Current' : `0${experience.length - index}`}</b></div><div><h3>{item.role}</h3><p className="company">{item.company}</p><p className="role-copy">{item.copy}</p></div></article>)}</div></section>
 
-      <section id="development" className="education section-pad"><div><p className="eyebrow">Foundation</p><h2>Built on the<br /><em>shop floor.</em></h2></div><div className="education-details"><div className="education-item"><h3>Electromechanical Engineering Technology</h3><p>Technological Institute of the Philippines · Manila, Philippines</p></div></div></section>
+      <section id="development" className="education section-pad"><div><p className="eyebrow">Foundation</p><h2>Built on the<br /><em>shop floor.</em></h2></div><div className="education-details"><p className="eyebrow">Education</p><h3>Bachelor of Science<br />in Industrial Engineering</h3><p>De La Salle, Lipa City<br />Philippines</p><div className="certs"><p className="eyebrow">Certifications & development</p><div className="cert-list"><span>Certified Project Management Specialist</span><span>Certified Lean Six Sigma Green Belt</span><span>Certified Lean Six Sigma Yellow Belt</span><span>Cybersecurity Fundamentals</span><span>Cybersecurity Foundation</span><span>Claroty Cybersecurity Analyst</span><span>School of Data Science</span><span>RPA Business Analyst Fundamentals</span><span>Tableau</span><span>Advanced Lean</span><span>Lean Fundamentals</span><span>Excel Master Class</span><span>Methods-Time Measurement</span><span>Ergonomics</span><span>AutoCAD — TESDA</span></div></div></div></section>
 
-      <section id="contact" className="contact section-pad">
-        <p className="eyebrow">Start a conversation</p>
-        <h2>Let&apos;s make the<br /><em>next system better.</em></h2>
-        <a className="contact-email" href="mailto:johnharleydeleon@gmail.com">
-          johnharleydeleon@gmail.com <ArrowUpRight />
-        </a>
-        <a className="contact-phone" href="tel:+36306138167">
-          +36 30 613 8167 <ArrowUpRight />
-        </a>
-        <div className="contact-footer">
-          <span>John Harley De Leon</span>
-          <span>Industrial Engineer / Digital Leader</span>
-          <span>© 2026</span>
-        </div>
-      </section>
+      <section id="contact" className="contact section-pad"><p className="eyebrow">Start a conversation</p><h2>Let&apos;s make the<br /><em>next system better.</em></h2><a className="contact-email" href="mailto:johnharleydeleon@gmail.com">johnharleydeleon@gmail.com <ArrowUpRight /></a><div className="contact-footer"><span>John Harley De Leon</span><span>Industrial Engineer / Digital Leader</span><span>© 2026</span></div></section>
     </main>
   )
 }
